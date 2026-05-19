@@ -1,0 +1,294 @@
+{
+  "name": "Medical AI Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Welcome to the Medical AI Assistant! I can help answer your medical questions and provide health information.\n\nHow can I assist you today?",
+        "availableInChat": true,
+        "agentIcon": {
+          "type": "emoji",
+          "value": "🏥"
+        },
+        "agentName": "Medical AI Assistant",
+        "agentDescription": "An AI-powered medical assistant for health information and guidance",
+        "suggestedPrompts": {
+          "prompts": [
+            {
+              "icon": {
+                "type": "emoji",
+                "value": "💊"
+              },
+              "text": "What are the symptoms of the flu?"
+            },
+            {
+              "icon": {
+                "type": "emoji",
+                "value": "🩺"
+              },
+              "text": "How can I manage high blood pressure?"
+            },
+            {
+              "icon": {
+                "type": "emoji",
+                "value": "🏃"
+              },
+              "text": "What are the benefits of regular exercise?"
+            }
+          ]
+        },
+        "options": {
+          "inputPlaceholder": "Ask me anything about health and medicine...",
+          "loadPreviousSession": "memory",
+          "showWelcomeScreen": true,
+          "getStarted": "Start Your Consultation",
+          "subtitle": "Your 24/7 health information companion",
+          "title": "Medical AI Assistant 🏥",
+          "responseMode": "streaming"
+        }
+      },
+      "id": "7d146d61-1563-4602-859b-b1ffc9f34900",
+      "name": "Medical Chat Interface",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        288
+      ],
+      "webhookId": "6237c6bb-7f67-4171-99d7-da4fa8781765"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "id": "d18eeec5-99f4-4974-b2d3-093b95eedd36",
+      "name": "Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        320,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a knowledgeable Medical AI Assistant designed to provide accurate health information and guidance.\n\nYour role:\n- Answer medical questions with evidence-based information\n- Provide clear explanations of symptoms, conditions, and treatments\n- Offer general health advice and wellness tips\n- Explain medical terminology in simple terms\n\nImportant guidelines:\n- Always remind users that you are an AI assistant, not a replacement for professional medical advice\n- Encourage users to consult healthcare professionals for diagnosis and treatment\n- Be empathetic and supportive in your responses\n- If asked about emergencies, advise immediate medical attention\n- Maintain patient privacy and confidentiality\n\nProvide helpful, accurate, and compassionate responses to support users' health and wellness journey.",
+          "maxIterations": 10,
+          "enableStreaming": true
+        }
+      },
+      "id": "80516de5-c916-4147-adad-62e211e224c7",
+      "name": "Medical AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        592,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "33e1551d-869b-47ec-aa6f-8d1b2265caf2",
+      "name": "OpenAI GPT-5",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        592,
+        496
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        736,
+        448
+      ],
+      "id": "c7dae6a9-53ff-4acf-9dcf-a10ea4888e73",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are a medical report generator. Given a patient's symptoms and an AI diagnosis, \ngenerate a structured medical report in this format:\n\n---\nMEDICAL ASSESSMENT REPORT\nDate: [today's date]\n---\nREPORTED SYMPTOMS: [list symptoms]\nSEVERITY: [mild/moderate/severe]\n\nPOSSIBLE CONDITIONS:\n1. [Illness Name] — [confidence]% match\n   Matched symptoms: [list]\n   Description: [1 sentence]\n\n2. [Second condition]\n3. [Third condition]\n\nURGENCY LEVEL: [Routine / See doctor soon / Emergency]\nRECOMMENDATION: [1-2 sentences]\nGENERAL ADVICE: [2-3 sentences of home care tips]\n\nDISCLAIMER: This is AI-generated. Not a medical diagnosis. \nConsult a licensed healthcare professional.\n---",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        912,
+        288
+      ],
+      "id": "6a26890d-71be-4313-86f7-9dcaa5de10c4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-6",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.5,
+      "position": [
+        896,
+        496
+      ],
+      "id": "deb4a5a7-d810-4739-a7a3-197d18d53a35",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "1judR6Qb6daku_2JkYsDsGDQP0hIct_BIrzrpeT8_JE_XqsKNz7cHMDyZLSnG_WeTc8gffmat",
+        "title": "=Medical Report - {{ $now.format('yyyy-MM-dd HH:mm') }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1264,
+        312.9843273162842
+      ],
+      "id": "de3f18dc-0fae-48d4-bfde-ed5d2617a550",
+      "name": "Create a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "EjCGxRlZcovBybT5",
+          "name": "Google Docs OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Medical Chat Interface": {
+      "main": [
+        [
+          {
+            "node": "Medical AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Medical Chat Interface",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Medical AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI GPT-5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Medical AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "Medical AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Medical AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "67f4760b-c1a0-4260-bcd1-2455f333c289",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3448711f95d2d1676f2b8590366517463698e75e700cd6c3e210fb50bd6ebd92"
+  },
+  "id": "wZmD5do6O42fHOyA",
+  "tags": []
+}
